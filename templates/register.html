@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - CollabRoom</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+         :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --success: #28a745;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .register-container {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 40px 35px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-align: center;
+            transform: translateY(0);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .register-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        /* Decorative elements */
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(76, 201, 240, 0.15);
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 120px;
+            height: 120px;
+            top: -40px;
+            right: -40px;
+        }
+        
+        .circle-2 {
+            width: 80px;
+            height: 80px;
+            bottom: -20px;
+            left: -20px;
+            background: rgba(67, 97, 238, 0.15);
+        }
+        
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .tagline {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        h2 {
+            color: white;
+            margin-bottom: 30px;
+            font-weight: 500;
+            font-size: 1.8rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .form-container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .input-group:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        
+        .input-group:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .input-group:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .input-group i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
+            outline: none;
+        }
+        
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .password-strength {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .strength-meter {
+            height: 100%;
+            width: 0;
+            background: var(--danger);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--success);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+            animation-delay: 0.4s;
+            animation-fill-mode: both;
+        }
+        
+        button:hover {
+            background: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        }
+        
+        button:after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 40px;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(30deg);
+            transition: all 0.6s;
+        }
+        
+        button:hover:after {
+            left: 120%;
+        }
+        
+        .terms {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin: 20px 0;
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out;
+            animation-delay: 0.5s;
+            animation-fill-mode: both;
+        }
+        
+        .terms a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .login-link {
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 25px;
+            display: block;
+            animation: fadeInUp 0.6s ease-out;
+            animation-delay: 0.6s;
+            animation-fill-mode: both;
+        }
+        
+        .login-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-left: 5px;
+        }
+        
+        .login-link a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .social-register {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            animation: fadeInUp 0.6s ease-out;
+            animation-delay: 0.7s;
+            animation-fill-mode: both;
+        }
+        
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .google-btn:hover {
+            background: #DB4437;
+        }
+        
+        .facebook-btn:hover {
+            background: #4267B2;
+        }
+        
+        .twitter-btn:hover {
+            background: #1DA1F2;
+        }
+        
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+        /* Responsive design */
+        
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 30px 25px;
+            }
+            .logo {
+                font-size: 2.3rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-container">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+
+        <div class="logo">CollabRoom</div>
+        <div class="tagline">Collaborate. Create. Connect.</div>
+
+        <h2>Create Your Account</h2>
+
+        <form method="POST" class="form-container">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" name="username" placeholder="Choose a username" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" placeholder="Your email address" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" id="password" placeholder="Create a password" required>
+                <div class="password-strength">
+                    <div class="strength-meter" id="strength-meter"></div>
+                </div>
+            </div>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <div class="terms">
+            By registering, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+        </div>
+
+        <div class="login-link">
+            Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+        </div>
+
+        <div class="social-register">
+            <a href="#" class="social-btn google-btn">
+                <i class="fab fa-google"></i>
+            </a>
+            <a href="#" class="social-btn facebook-btn">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-btn twitter-btn">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2023 CollabRoom. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Password strength indicator
+        const passwordInput = document.getElementById('password');
+        const strengthMeter = document.getElementById('strength-meter');
+
+        passwordInput.addEventListener('input', function() {
+            const password = passwordInput.value;
+            let strength = 0;
+
+            // Check password length
+            if (password.length >= 8) strength += 25;
+
+            // Check for lowercase letters
+            if (/[a-z]/.test(password)) strength += 25;
+
+            // Check for uppercase letters
+            if (/[A-Z]/.test(password)) strength += 25;
+
+            // Check for numbers
+            if (/[0-9]/.test(password)) strength += 25;
+
+            // Update strength meter
+            strengthMeter.style.width = strength + '%';
+
+            // Update color based on strength
+            if (strength < 50) {
+                strengthMeter.style.background = '#ef4444'; // red
+            } else if (strength < 75) {
+                strengthMeter.style.background = '#f59e0b'; // orange
+            } else {
+                strengthMeter.style.background = '#10b981'; // green
+            }
+        });
+
+        // Add animation to elements on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.logo, .tagline, h2, .terms, .login-link, .social-register');
+
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                el.style.animationDelay = (0.2 + index * 0.1) + 's';
+            });
+        });
+    </script>
+</body>
+
+</html>

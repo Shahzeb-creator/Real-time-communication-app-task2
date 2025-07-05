@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room: {{ room }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4ade80;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 0 auto;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .room-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .room-title span {
+            color: var(--accent);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 8px 15px;
+            border-radius: 50px;
+        }
+        
+        .user-icon {
+            background: var(--primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+        
+        .btn-warning:hover {
+            background: #e69008;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: var(--dark);
+        }
+        
+        .content-row {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        @media (min-width: 992px) {
+            .content-row {
+                flex-direction: row;
+            }
+        }
+        
+        .video-section {
+            flex: 1;
+            min-height: 400px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .whiteboard-section {
+            flex: 1;
+            min-height: 400px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #videos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .video-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        video {
+            width: 220px;
+            height: auto;
+            background: #000;
+            display: block;
+            transform: scaleX(-1);
+            /* Mirror for local video */
+        }
+        
+        .video-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 6px 10px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        
+        #localVideo {
+            border: 3px solid var(--accent);
+        }
+        
+        canvas {
+            width: 100%;
+            height: 100%;
+            background: white;
+            cursor: crosshair;
+        }
+        
+        .files-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+        
+        .file-upload {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .file-upload-btn {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            transition: var(--transition);
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .file-upload-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .file-upload-btn i {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        #fileInput {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        #fileList {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: var(--transition);
+        }
+        
+        .file-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .file-icon {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+        
+        .file-name {
+            font-weight: 500;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .file-action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .file-action-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .participants-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+        
+        .participants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .participant-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+        }
+        
+        .participant-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-3px);
+        }
+        
+        .participant-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        /* Responsive adjustments */
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            .controls {
+                gap: 10px;
+            }
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            video {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="room-title">Room: <span>{{ room }}</span></h1>
+            <div class="user-info">
+                <div class="user-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>{{ session['user'] }}</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-warning" onclick="startScreenShare()">
+                <i class="fas fa-desktop"></i> Share Screen
+            </button>
+            <button class="btn btn-primary" id="muteBtn">
+                <i class="fas fa-microphone"></i> Mute
+            </button>
+            <button class="btn btn-primary" id="videoBtn">
+                <i class="fas fa-video"></i> Video Off
+            </button>
+            <button class="btn btn-success" id="chatBtn">
+                <i class="fas fa-comment"></i> Chat
+            </button>
+            <button class="btn btn-danger" onclick="leaveRoom()">
+                <i class="fas fa-phone-alt"></i> Leave Call
+            </button>
+        </div>
+
+        <div class="content-row">
+            <div class="video-section">
+                <div class="section-title">
+                    <i class="fas fa-users"></i> Participants
+                </div>
+                <div id="videos">
+                    <div class="video-container">
+                        <video id="localVideo" autoplay muted></video>
+                        <div class="video-label">You ({{ session['user'] }})</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="whiteboard-section">
+                <div class="section-title" style="color: #4361ee; padding: 10px 15px; background: #f0f4ff;">
+                    <i class="fas fa-pencil-alt"></i> Collaborative Whiteboard
+                </div>
+                <canvas id="board" width="600" height="400"></canvas>
+            </div>
+        </div>
+
+        <div class="files-section">
+            <div class="section-title">
+                <i class="fas fa-file-upload"></i> File Sharing
+            </div>
+
+            <div class="file-upload">
+                <div class="file-upload-btn">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Click to upload or drag & drop</span>
+                    <input type="file" id="fileInput" onchange="uploadFile('{{ room }}')">
+                </div>
+                <button class="btn btn-primary">
+                    <i class="fas fa-folder-open"></i> Open Files
+                </button>
+            </div>
+
+            <h5>Shared Files:</h5>
+            <ul id="fileList">
+                <li class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="file-name">Project_Requirements.pdf</div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="file-action-btn">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="file-action-btn">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </li>
+                <li class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">
+                            <i class="fas fa-file-image"></i>
+                        </div>
+                        <div class="file-name">Design_Mockups.png</div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="file-action-btn">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="file-action-btn">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="participants-section">
+            <div class="section-title">
+                <i class="fas fa-user-friends"></i> Participants (3)
+            </div>
+            <div class="participants-grid">
+                <div class="participant-card">
+                    <div class="participant-avatar">A</div>
+                    <div>Arslan</div>
+                </div>
+                <div class="participant-card">
+                    <div class="participant-avatar">Y</div>
+                    <div>You</div>
+                </div>
+                <div class="participant-card">
+                    <div class="participant-avatar">M</div>
+                    <div>Maria</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>CollabRoom - Secure Video Conferencing &bull; All connections are encrypted</p>
+            <p class="mt-2">You're currently in room: {{ room }} &bull; <span id="timer">00:00:00</span></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        const room = "{{ room }}";
+        const username = "{{ session['user'] }}";
+
+        // Timer functionality
+        let startTime = Date.now();
+        setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const seconds = Math.floor((elapsed / 1000) % 60);
+            const minutes = Math.floor((elapsed / (1000 * 60)) % 60);
+            const hours = Math.floor((elapsed / (1000 * 60 * 60)) % 24);
+
+            document.getElementById('timer').textContent =
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // Start local video
+        const localVideo = document.getElementById("localVideo");
+        navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            })
+            .then(stream => {
+                localVideo.srcObject = stream;
+            })
+            .catch(error => {
+                console.error("Camera error:", error);
+            });
+
+        // Simulate remote participants
+        setTimeout(() => {
+            const videosContainer = document.getElementById('videos');
+
+            // Add remote participant videos
+            const participants = ['Arslan', 'Maria'];
+            participants.forEach(participant => {
+                const videoContainer = document.createElement('div');
+                videoContainer.className = 'video-container';
+                videoContainer.innerHTML = `
+                    <video autoplay></video>
+                    <div class="video-label">${participant}</div>
+                `;
+                videosContainer.appendChild(videoContainer);
+            });
+        }, 1000);
+
+        // Button functionality
+        const muteBtn = document.getElementById('muteBtn');
+        const videoBtn = document.getElementById('videoBtn');
+
+        let isMuted = false;
+        let isVideoOff = false;
+
+        muteBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            muteBtn.innerHTML = isMuted ?
+                '<i class="fas fa-microphone-slash"></i> Unmute' :
+                '<i class="fas fa-microphone"></i> Mute';
+            muteBtn.classList.toggle('btn-outline-primary', isMuted);
+            console.log(`Audio ${isMuted ? 'muted' : 'unmuted'}`);
+        });
+
+        videoBtn.addEventListener('click', () => {
+            isVideoOff = !isVideoOff;
+            videoBtn.innerHTML = isVideoOff ?
+                '<i class="fas fa-video-slash"></i> Video On' :
+                '<i class="fas fa-video"></i> Video Off';
+            videoBtn.classList.toggle('btn-outline-primary', isVideoOff);
+
+            if (localVideo.srcObject) {
+                localVideo.srcObject.getVideoTracks()[0].enabled = !isVideoOff;
+            }
+            console.log(`Video ${isVideoOff ? 'off' : 'on'}`);
+        });
+
+        // Chat functionality
+        const chatBtn = document.getElementById('chatBtn');
+        chatBtn.addEventListener('click', () => {
+            alert('Chat functionality would open here');
+        });
+
+        function leaveRoom() {
+            if (confirm('Are you sure you want to leave this room?')) {
+                alert('Redirecting to home page...');
+                // In a real app, this would redirect to the home page
+            }
+        }
+
+        function startScreenShare() {
+            alert('Screen sharing functionality would start here');
+        }
+
+        function uploadFile(roomId) {
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name;
+                alert(`File "${fileName}" would be uploaded to room: ${roomId}`);
+            }
+        }
+    </script>
+</body>
+
+</html>
